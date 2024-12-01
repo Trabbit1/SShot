@@ -20,8 +20,8 @@
 clear
 
 # VARIABLES
-url="$1"
-argument="$2"
+urls=()           # Array to hold URLs
+argument=""       # Additional argument for full screenshot option
 
 # Colors
 RED="\e[31m"        # Classic RED
@@ -42,20 +42,35 @@ check_dependencies() {
     command -v curl &>/dev/null || { echo -e "${RED}Error: curl is not installed. Please install it.${NE}"; exit 1; }
 }
 
-# Functions
+# Progress bar for downloading
+progress_bar() {
+    # This function will show a simple progress bar for wget
+    local progress=$(($1 * 100 / $2))
+    printf "\r[%-50s] %d%%" $(printf "%0.s#" $(seq 1 $progress)) $progress
+}
 
-menu() {
-    echo "           .---.  "
-    echo "           |[ ]|  "
-    echo "    _.==._.-----.___n__"
-    echo "   | __ ___.-''-. _____|    SSHOT - Trabbit"
-    echo "   |[__]  /.''''.\ _   |  Web Screenshot Tool"
-    echo "   |     // /''\ \\\_)  |"
-    echo "   |     \\\ \__/ //    |"
-    echo "   |      \'.__.'/     |"
-    echo "   \======='-..-'======/"
-    echo "    '-----------------'"
-    echo
+# Retry mechanism for downloading the screenshot
+download_screenshot() {
+    local url=$1
+    local filename=$2
+    local retries=3
+    local attempt=1
+
+    while [[ $attempt -le $retries ]]; do
+        wget -q --show-progress "$url" -O "$filename"
+        if [[ $? -eq 0 ]]; then
+            echo -e "\nScreenshot saved as: ${GREEN}$filename${NE}"
+            echo
+            echo -e "---------"
+            echo
+            return 0
+        fi
+        echo -e "${RED}Error: Download failed, retrying... ($attempt/$retries)${NE}"
+        ((attempt++))
+    done
+
+    echo -e "${RED}Failed to download screenshot after $retries attempts.${NE}"
+    exit 1
 }
 
 # Ensure the URL has a protocol (http:// or https://)
@@ -65,6 +80,7 @@ ensure_protocol() {
     fi
 }
 
+# Function to handle getting the screenshot
 get_screenshot() {
     if [[ -z $url ]]; then
         echo -e "Please Provide The Target URL"
@@ -82,7 +98,7 @@ get_screenshot() {
             -f | -full)
                 screenshot_url=$(curl -sL "https://api.microlink.io/?url=$url/&screenshot.element=body" | jq -r '.data.screenshot.url')
                 ;;
-            *)
+            * )
                 echo -e "Invalid Argument: $argument. Valid option is -f or -full."
                 exit 0
                 ;;
@@ -100,13 +116,49 @@ get_screenshot() {
     timestamp=$(date +%Y%m%d%H%M%S)
     screenshot_filename="screenshot_$timestamp.png"
 
-    # Download the screenshot with the unique filename
-    wget -q "$screenshot_url" -O "$screenshot_filename"
-    if [[ $? -eq 0 ]]; then
-        echo -e "Screenshot saved as: ${GREEN}$screenshot_filename${NE}"
-    else
-        echo -e "${RED}Error: Failed to save the screenshot.${NE}"
-        exit 1
+    download_screenshot "$screenshot_url" "$screenshot_filename"
+}
+
+# Help message
+help() {
+    echo -e "${YELLOW}Usage: $0 [options] <url1> [url2] [url3] ...${NE}"
+    echo -e "This script takes a screenshot of websites and saves them as PNG images."
+    echo -e "\nOptions:"
+    echo -e "  -f, --full-page       Take a full-page screenshot of the webpage (default)."
+    echo -e "  -h, --help      Show this help message."
+    echo -e "\nExamples:"
+    echo -e "  $0 http://example.com      Take a screenshot of http://example.com."
+    echo -e "  $0 -f http://example.com   Take a full-page screenshot of http://example.com."
+    echo -e "  $0 http://example1.com http://example2.com  Take screenshots of both URLs."
+    echo -e "\nNote: If no URL protocol (http:// or https://) is provided, 'https' will be assumed."
+    exit 0
+}
+
+# Parse command-line arguments
+parse_args() {
+    while [[ "$1" =~ ^- ]]; do
+        case "$1" in
+            -f | --full-page)
+                argument="-full"
+                shift
+                ;;
+            -h | --help)
+                help
+                ;;
+            *)
+                echo -e "${RED}Error: Invalid option $1${NE}"
+                help
+                ;;
+        esac
+    done
+
+    # Capture the remaining arguments as URLs
+    urls=("$@")
+
+    # Check if URLs are provided
+    if [[ ${#urls[@]} -lt 1 ]]; then
+        echo -e "${RED}Error: No URLs provided.${NE}"
+        help
     fi
 }
 
@@ -114,8 +166,27 @@ get_screenshot() {
 main() {
     check_dependencies
     menu
-    get_screenshot
+    parse_args "$@"
+
+    for url in "${urls[@]}"; do
+        get_screenshot "$url"
+    done
+}
+
+# Menu
+menu() {
+    echo "           .---.  "
+    echo "           |[ ]|  "
+    echo "    _.==._.-----.___n__"
+    echo "   | __ ___.-''-. _____|    SSHOT - Trabbit"
+    echo "   |[__]  /.''''.\ _   |  Web Screenshot Tool"
+    echo "   |     // /''\ \\\_)  |"
+    echo "   |     \\\ \__/ //    |"
+    echo "   |      \'.__.'/     |"
+    echo "   \======='-..-'======/"
+    echo "    '-----------------'"
+    echo
 }
 
 # Call the main function
-main
+main "$@"
