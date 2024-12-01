@@ -58,11 +58,21 @@ menu() {
     echo
 }
 
+# Ensure the URL has a protocol (http:// or https://)
+ensure_protocol() {
+    if [[ ! $url =~ ^https?:// ]]; then
+        url="https://$url"
+    fi
+}
+
 get_screenshot() {
     if [[ -z $url ]]; then
         echo -e "Please Provide The Target URL"
         exit 0
     fi
+
+    # Ensure the URL has the appropriate protocol
+    ensure_protocol
 
     # Determine the screenshot URL
     if [[ -z $argument ]]; then
