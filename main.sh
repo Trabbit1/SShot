@@ -139,6 +139,7 @@ parse_args() {
     while [[ "$1" =~ ^- ]]; do
         case "$1" in
             -f | --full-page)
+                ensure_protocol
                 argument="-full"
                 shift
                 ;;
