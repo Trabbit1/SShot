@@ -127,9 +127,9 @@ help() {
     echo -e "  -f, --full-page       Take a full-page screenshot of the webpage (default)."
     echo -e "  -h, --help      Show this help message."
     echo -e "\nExamples:"
-    echo -e "  $0 http://example.com      Take a screenshot of http://example.com."
-    echo -e "  $0 -f http://example.com   Take a full-page screenshot of http://example.com."
-    echo -e "  $0 http://example1.com http://example2.com  Take screenshots of both URLs."
+    echo -e "  $(basename $0) http://example.com      Take a screenshot of http://example.com."
+    echo -e "  $(basename $0) -f http://example.com   Take a full-page screenshot of http://example.com."
+    echo -e "  $(basename $0) http://example1.com http://example2.com  Take screenshots of both URLs."
     echo -e "\nNote: If no URL protocol (http:// or https://) is provided, 'https' will be assumed."
     exit 0
 }
