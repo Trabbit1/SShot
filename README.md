@@ -3,6 +3,7 @@
 
 ## INFOS
 The average pricing for 10,000 web screenshots 
+
 increases from $28.50 to $53.30 on online APIs
 
 ## Installation
