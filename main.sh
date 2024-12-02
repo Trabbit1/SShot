@@ -121,7 +121,7 @@ get_screenshot() {
 
 # Help message
 help() {
-    echo -e "${YELLOW}Usage: $0 [options] <url1> [url2] [url3] ...${NE}"
+    echo -e "${YELLOW}Usage: $(basename $0) [options] <url1> [url2] [url3] ...${NE}"
     echo -e "This script takes a screenshot of websites and saves them as PNG images."
     echo -e "\nOptions:"
     echo -e "  -f, --full-page       Take a full-page screenshot of the webpage (default)."
