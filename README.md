@@ -2,7 +2,8 @@
 ![image](https://github.com/user-attachments/assets/35155380-d460-4872-bfda-6292bf7f4d76)
 
 ## INFOS
-The average price for 10,000 web screenshots is $28.50 to $53.30 on online APIs
+The average price for 10,000 web screenshots is 
+$28.50 to $53.30 on online APIs
 
 ## Installation
 
