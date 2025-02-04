@@ -88,11 +88,11 @@ get_screenshot() {
 
     # Determine the screenshot URL
     if [[ -z $argument ]]; then
-        screenshot_url=$(curl -sL "https://api.microlink.io/?url=$url/&screenshot" | jq -r '.data.screenshot.url')
+        screenshot_url=$(curl -sL "https://api.microlink.io/?url=$url/&screenshot&waitUntil=load" | jq -r '.data.screenshot.url')
     else
         case $argument in
             -f | -full)
-                screenshot_url=$(curl -sL "https://api.microlink.io/?url=$url/&screenshot.element=body" | jq -r '.data.screenshot.url')
+                screenshot_url=$(curl -sL "https://api.microlink.io/?url=$url/&screenshot.element=body&waitUntil=load" | jq -r '.data.screenshot.url')
                 ;;
             * )
                 echo -e "Invalid Argument: $argument. Valid option is -f or -full."
