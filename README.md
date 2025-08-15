@@ -1,19 +1,24 @@
-# Sshot
-### FREE UNLIMITED WEB SCREENSHOTS
-![image](https://github.com/user-attachments/assets/35155380-d460-4872-bfda-6292bf7f4d76)
+<p align="center">
+  <img src="https://i.ibb.co/TqJHYspv/image-2.png" alt="BHunty Logo" width="280"/>
+</p>
+
+# SShot
+### CLI tool to capture website screenshots from single or multiple URLs for FREE
+
+  <img src="https://github.com/Trabbit1/SShot/blob/main/Medias/sshot.gif" alt="BHunty Logo" width="465"/>
 
 ## Installation
 
 Classic method
-```
+```bash
  git clone https://github.com/Trabbit0ne/Sshot.git && cd Sshot && cp main.sh $(dirname $(command -v bash))/sshot && chmod +x $(dirname $(command -v bash))/sshot
 ```
 Curl method
-```
+```bash
 curl -sSL https://raw.githubusercontent.com/Trabbit0ne/Sshot/refs/heads/main/main.sh -o $(dirname $(command -v bash))/sshot && chmod +x $(dirname $(command -v bash))/sshot
 ```
 Then
 
-```
+```bash
 sshot
 ```
