@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.ibb.co/TqJHYspv/image-2.png" alt="BHunty Logo" width="280"/>
+  <img src="https://github.com/Trabbit1/SShot/blob/main/Medias/logo.png" alt="BHunty Logo" width="280"/>
 </p>
 
 # SShot
